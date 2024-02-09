@@ -1,0 +1,192 @@
+#include <fstream>
+#include <cstring>
+using namespace std;
+
+ifstream fin("becuri1.in");
+ofstream fout("becuri1.out");
+
+int v[101];
+
+int rasturnat(int n)
+{
+    int t=1;
+
+    int cl=n;
+
+    while(cl>9)
+    {
+        cl/=10;
+        t*=10;
+    }
+    int r = (n%t)*10+cl;
+
+    return r;
+}
+
+int cif(int n)
+{
+    while(n>9)
+    {
+        n/=10;
+    }
+
+    return n;
+}
+
+/*
+int prim(int n)
+{
+
+    int i;
+
+    if(n==0 || n==1)
+        return 0;
+
+    if(n==2)
+        return 1;
+
+    if(n%2==0)
+        return 0;
+
+    for(i=3; i*i<=n; i+=2)
+    {
+        if(n%i==0)
+            return 0;
+    }
+    return 1;
+
+}
+*/
+
+int main()
+{
+    int c;
+    char prime[]={"2357"};
+
+    fin>>c;
+
+    if(c==1)
+    {
+        int n;
+        fin>>n;
+        int cnt=0;
+        for(int i=1; i<=n; i++)
+        {
+            fin>>v[i];
+            while(v[i]>9)
+            {
+                v[i]/=10;
+            }
+
+            if(strchr(prime, v[i]+'0'))
+            {
+                cnt++;
+            }
+        }
+        fout<<cnt;
+    }
+    if(c==2)
+    {
+        int n, i, mx=-1, cic=0;
+        fin>>n;
+
+        for(i=1; i<=n; i++)
+        {
+            fin>>v[i];
+            if(v[i]>mx)
+                mx=v[i];
+        }
+
+        while(mx>0)
+        {
+            mx/=10;
+            cic++;
+        }
+        int j, cl, cnt;
+        mx=-1;
+        for(i=1; i<=cic; i++)
+        {
+            cnt=0;
+            for(j=1; j<=n; j++)
+            {
+                cl=v[j];
+                while(cl>9)
+                {
+                    cl/=10;
+                }
+                if(strchr(prime, cl+'0'))
+                {
+                    cnt++;
+                }
+            }
+            if(cnt>mx)
+                mx=cnt;
+            for(j=1; j<=n; j++)
+            {
+                v[j]=rasturnat(v[j]);
+            }
+        }
+        fout<<mx;
+
+    }
+    if(c==3)
+    {
+        int n, mx=-1, cic=0, x[101], m=1, cnt=0;
+
+        fin>>n;
+
+        int i;
+
+        for(i=1; i<=n; i++)
+        {
+            fin>>v[i];
+            if(v[i]>mx)
+                mx=v[i];
+        }
+        if(mx==0)
+            cic=1;
+        while(mx>0)
+        {
+            mx/=10;
+            cic++;
+        }
+
+        int j;
+        mx=0;
+        for(i=1; i<=n; i++)
+        {
+            cnt=0;
+            for(j=1; j<=cic; j++)
+            {
+                if(strchr(prime, cif(v[i])+'0'))
+                    cnt++;
+                v[i]=rasturnat(v[i]);
+            }
+            if(cnt>mx)
+            {
+                mx=cnt;
+                m=1;
+                x[m]=i;
+            }
+            else if(cnt==mx)
+            {
+                m++;
+                x[m]=i;
+            }
+
+        }
+        if(mx==0)
+            fout<<-1;
+        else
+        {
+            for(i=1; i<=m; i++)
+            {
+                fout<<x[i]<<' ';
+            }
+        }
+
+
+    }
+
+    return 0;
+}
